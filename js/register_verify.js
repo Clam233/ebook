@@ -113,14 +113,30 @@ function tipsForInput(){
 
     telNumber.blur(function () {
 
-        reg = /^1[3|4|5|7|8][0-9]\d{4,8}$/i;//验证手机正则(输入前7位至11位)
-        if(this.value == ""){
+        var reg = /^1[3|4|5|7|8][0-9]\d{4,8}$/i;//验证手机正则(输入前7位至11位)
+        var val = this.value;
+        if(!val.match(reg) || val == ""){
             telNumber.addClass("warning");
-            console.log("输入内容为空");
+            console.log("电话号码输入格式有误！");
         }
-        if(this.val().length != 11 ){
-            telNumber.addClass("warning");
-            console.log("输入的手机号长度有误！");
+        else {
+            console.log("电话号码格式正确！");
+            $.ajax({
+                type:get,
+                url:url,
+                data:{
+                    tel:val
+                },
+                dataType: 'json',
+                success:function (data) {
+                    console.log("电话号码可用！");
+                    return true;
+                },
+                error:function () {
+                    console.log("电话号码已注册过账号！")
+                    return false;
+                }
+            })
         }
     });
 
@@ -130,6 +146,12 @@ function tipsForInput(){
             console.log("输入内容为空！");
         }
     });
+
+    /* 点击按钮，发送短信验证码
+    *
+    * */
+
+
     //设置注册按钮的点击事件，判断是否点击按钮的时候表单的输入内容为空
     btnRegister.click(function () {
         console.log("点击事件");
@@ -139,7 +161,7 @@ function tipsForInput(){
             console.log(this.id);
             if(this.value == ""){
                 input_txt.eq(i).addClass("warning");
-                console.log("输入内容为空！");
+                console.log("注册请求发送失败，输入内容为空！");
             }
             /*else{
                 $.ajax({
