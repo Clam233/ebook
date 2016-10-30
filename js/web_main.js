@@ -19,7 +19,7 @@ function loginFormRegister(){
         "<input type='text' name='input_txt' id='testCode' placeholder='输入验证码' class='input inputHeight inputNumber' id=''> <input type='button' class='inputHeight inputBtn inputMessage' id='' value='刷新验证码'><br>" +
         "<input type='button' class='input inputHeight inputWidth inputBtn' id='' value='登陆'> <br>" +
         "<span class='smallInfo'>还没有账号?"+
-            "<a href='regiater.html' id='loginFormRegister'>注册</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
+            "<a href='register.html' id='loginFormRegister'>注册</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
         "</span>";
     $("#loginFormRegister").click(function(){
         //console.log("to login!");
