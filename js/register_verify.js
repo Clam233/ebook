@@ -13,6 +13,7 @@ function tipsForInput(){
     var registerPassword = $("#registerPassword");
     var registerPassword_again = $("#registerPassword_again");
     var telNumber = $("#tel_number");
+    var sendBtn = $("#sendBtn"); //获取发送验证码的按钮
     var telMessage = $("#tel_message");
     var btnRegister = $("#btnRegister");
 
@@ -40,13 +41,13 @@ function tipsForInput(){
         else {
             var url = "";
             $.ajax({
-                type:get,
+                type:"get",
                 url:url,//接口
-                dataType: 'json',
+                dataType: "json",
                 data:{
-                    usr:registerUsername
+                    usr:registerUsername.val()
                 },
-                success:function (data) {
+                success:function () {
                     /*提示：
                      * 1.用户名可用 return true;
                      * 2.用户名不可用 return false;
@@ -74,7 +75,7 @@ function tipsForInput(){
             //var strength = val.match(standard).length;
             if( strObj == null || strObj.length <= 1 ){
                 registerPassword.addClass("warning");
-                registerPassword.value == null;
+                registerPassword.val() == null;
                 registerPassword.attr('placeholder',"长度为6-20，至少一个小写字母，至少一个大写字母");
                 alert("强度弱！");
             }
@@ -100,7 +101,7 @@ function tipsForInput(){
             return false;
         }
         /*验证重新输入的密码是否与上次输入否认密码相同*/
-        else if(this.value != registerPassword.value){
+        else if(this.value != registerPassword.val()){
             registerPassword_again.addClass("warning");
             alert("两次输入的密码不同");
             return false;
@@ -122,18 +123,18 @@ function tipsForInput(){
         else {
             console.log("电话号码格式正确！");
             $.ajax({
-                type:get,
+                type:"get",
                 url:url,
                 data:{
                     tel:val
                 },
-                dataType: 'json',
+                dataType: "json",
                 success:function (data) {
                     console.log("电话号码可用！");
                     return true;
                 },
                 error:function () {
-                    console.log("电话号码已注册过账号！")
+                    console.log("验证失败！");
                     return false;
                 }
             })
@@ -148,8 +149,41 @@ function tipsForInput(){
     });
 
     /* 点击按钮，发送短信验证码
-    *
+    *  实现的思路：
+    *  点击事件不用再次的验证手机号码的格式和其他的问题。
+    *  只需要向后发送  给这个手机号码发送验证码   的请求，
+    *  然后开始一分钟的倒计时
+    *       倒计时的实现思路：
+    *           初值为 60 --> delay(1000)--> 执行 -1 操作 --> until(初值变成0 ，value)
     * */
+    sendBtn.click(function () {
+        var val = telNumber.val();
+        $.ajax({
+            type:"get",
+            url:url,
+            data:{
+                tel:val
+            },
+            dataType: "json",
+            success:function (data) {
+                alert("短信已发送，注意接收！");
+                getCodeTime();
+            },
+            error:function () {
+                console.log("短信发送失败！");
+                return false;
+            }
+        })
+
+    })
+
+    var wait = 60;
+    function getCodeTime(o) {
+        if(wait ==0){
+            
+        }
+
+    }
 
 
     //设置注册按钮的点击事件，判断是否点击按钮的时候表单的输入内容为空
@@ -165,7 +199,7 @@ function tipsForInput(){
             }
             /*else{
                 $.ajax({
-                    type:"get",
+                    type:""get"",
                     url: url,
                     async:true,
                     data:{
@@ -173,22 +207,22 @@ function tipsForInput(){
                     }
                 })
             }*/
-        })
+        });
 
 
         var url = "";/*注册接口*/
         if("表单输入格式正确"){
             $.ajax({
-                type:get,
+                type:"get",
                 url:url,
                 async:true,
-                dataType:'json',
+                dataType:"json",
                 data:{
-                    usr:input_txt.eq(0).value,
-                    pwd:input_txt.eq(1).value,
-                    pwd_again:input_txt.eq(2).value,
-                    tel:input_txt.eq(3).value,
-                    msg:input_txt.eq(4).value
+                    usr:input_txt.eq(0).val(),
+                    pwd:input_txt.eq(1).val(),
+                    pwd_again:input_txt.eq(2).val(),
+                    tel:input_txt.eq(3).val(),
+                    msg:input_txt.eq(4).val()
                 },
                 success:function (data) {
                     alert("注册成功，回到登陆界面！");
