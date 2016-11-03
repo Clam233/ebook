@@ -25,7 +25,7 @@ function tipsForInput(){
           ·只能以字母开头，包含字符 数字 下划线，例如：beijing.2008
           ·用户名长度为4～18个字符
          */
-        var patten = /^[a-zA-Z]\w{3,15}$/ig;
+        var patten = /^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]+$/ ;
         if(this.value == ""){
             registerUsername.addClass("warning");
             registerUsername.placeholder = "用户名不能为空！";
@@ -177,10 +177,21 @@ function tipsForInput(){
 
     })
 
+    //jquery ajax的success的回调函数中实现按钮置灰倒计时
     var wait = 60;
     function getCodeTime(o) {
         if(wait ==0){
-            
+            o.removeAttribute("disabled");
+            o.value = "免费获取验证码";
+            wait = 60;
+        }
+        else {
+            o.setAttribute("disabled",true);
+            o.value = "("+ wait + ")秒后重新获取";
+            wait--;
+            setTimeout(function () {
+                getCodeTime(o)
+            },1000)
         }
 
     }
